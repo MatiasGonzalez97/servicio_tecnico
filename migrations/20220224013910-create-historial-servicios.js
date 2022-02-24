@@ -28,6 +28,10 @@ module.exports = {
         type: Sequelize.FLOAT(10,2),
         allowNull: false,
       },
+      id_transaccion : {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

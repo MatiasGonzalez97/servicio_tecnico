@@ -1,4 +1,5 @@
 const db = require('../models/index.js');
+const validador_auto = require('../helper/color_auto_validator');
 
 const serviciosService = {
     traerTodosLosServicios : async () => {
@@ -21,12 +22,25 @@ const serviciosService = {
     registarServicio : async (req) => {
         try{
 
-            const servicios = req.id_servicio;
+            let servicios = req.id_servicio;
             const id_auto = req.id_auto;
             let monto_total = 0;
             let servicio_realizado = [];
+
+            /* Crear id_transaccion*/
+            do {
+                var id_transaccion = Math.floor(Math.random() * 99999) + 1 ;
+                var servicio_encontrado = await db.historial_servicios.findOne({
+                    where : {id_transaccion : id_transaccion}
+                });
+            } while(servicio_encontrado != null)
+            /*------------------------*/
+
+            servicios = await validador_auto.autoGris(servicios,id_auto);
+
             if(servicios.length > 0) {
                 for(value in servicios ) {
+                    console.log(servicios[value]);
 
                     let servicio = await db.servicio.findOne({
                         where : {id : servicios[value]}
@@ -34,10 +48,11 @@ const serviciosService = {
 
                     if(servicio) {
 
-                        const servicio_guardado = await db.historial_servicios.create({
+                        var servicio_guardado = await db.historial_servicios.create({
                             id_auto : id_auto,
                             id_servicio : servicios[value],
-                            monto : servicio.monto
+                            monto : servicio.monto,
+                            id_transaccion : id_transaccion
                         });
                         if(servicio_guardado){
 
@@ -46,8 +61,7 @@ const serviciosService = {
                             servicio_realizado.push(servicio.nombre);
                         } else {
                             return {"status":500,"res": {"data" : 'No se pudo guardar el servicio'}};
-                        }
-                        
+                        }           
                     } else {
                         return {"status":400,"res": {"data" : 'No se pudo encontrar el servicio'}}
                     }                    
@@ -58,7 +72,8 @@ const serviciosService = {
             resultado = {"status":200,"res": {"data" : 
                 {
                     'servicios_realizados' : servicio_realizado,
-                    'monto_total' : monto_total
+                    'monto_total' : monto_total,
+                    'id_transaccion' : id_transaccion
                 }
             }};
 
