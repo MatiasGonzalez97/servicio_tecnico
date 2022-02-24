@@ -17,7 +17,7 @@ Para inicializar el proyecto.
 7 - Cómo ultimo paso para levantar el servidor, en consola debemos correr : npm run dev
 
 
-## Link al json de postman para importarlo y poder probarlos.
+## Link al json de postman para poder probar los endpoints.
     https://www.getpostman.com/collections/030e5c8dafe01853fbed
 
 ## Endpoints dentro de la aplicacion y explicación de los mismos:
