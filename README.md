@@ -1,3 +1,5 @@
+Tecnologías utilizadas en el proyecto: Node.js,Express.js,Joi,Sequelize,MySQL
+
 Hola! estos son los pasos para correr el proyecto
 
 Para inicializar el proyecto.
