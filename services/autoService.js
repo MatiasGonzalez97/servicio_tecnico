@@ -1,10 +1,23 @@
 const db = require('../models/index.js');
+const validador = require('../helper/validator');
 
 const autoService = {
     registrarAuto : async (req) => {
         try{ 
             const {marca,anio,patente,color,modelo,id_propietario} = req;
-            console.log(id_propietario);
+            
+            const { value, error } = validador.validar_auto({marca,modelo,anio,patente,color,id_propietario});
+
+            const validar_propietario = await validador.validar_existencia_propietario(id_propietario);
+
+            if(!validar_propietario){
+                return {"status":"400","res":{"error" : "Ese propietario no se encuentra registrado"}};
+            }
+
+            if(error) {
+                return {"status":"400","res":{"error" : error.details[0].message}};
+            }
+            
             const result = await db.Auto.create({
                 marca : marca,
                 anio : anio,

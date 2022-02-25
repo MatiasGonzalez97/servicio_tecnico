@@ -1,10 +1,17 @@
 const db = require('../models/index.js');
+const validador = require('../helper/validator');
 
 const propietarioService = {
     crearPropietario : async (req) => {
         try{
             const {apellido,nombre,email,dni} = req;
 
+            const { value, error } = validador.validar_propietario({apellido,nombre,email,dni});
+
+            if(error) {
+                return {"status":"400","res":{"error" : error.details[0].message}};
+            }
+            
             const result = await db.propietario.create({
                 apellido : apellido,
                 nombre : nombre,

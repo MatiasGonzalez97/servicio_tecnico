@@ -40,7 +40,6 @@ const serviciosService = {
 
             if(servicios.length > 0) {
                 for(value in servicios ) {
-                    console.log(servicios[value]);
 
                     let servicio = await db.servicio.findOne({
                         where : {id : servicios[value]}
@@ -57,7 +56,7 @@ const serviciosService = {
                         if(servicio_guardado){
 
                             monto_total += servicio.monto;
-                            //guardo el nombre de los servicios realizados
+
                             servicio_realizado.push(servicio.nombre);
                         } else {
                             return {"status":500,"res": {"data" : 'No se pudo guardar el servicio'}};
@@ -67,7 +66,7 @@ const serviciosService = {
                     }                    
                 }
             }
-            //TODO: realizar la validacion de que la pintura no la pueden realizar los autos grises.
+
             
             resultado = {"status":200,"res": {"data" : 
                 {
